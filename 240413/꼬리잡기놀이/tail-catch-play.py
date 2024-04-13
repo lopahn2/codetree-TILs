@@ -50,7 +50,6 @@ for k in range(K):
     # [2] 공 던지기
     
     bdri = ( k // N ) % 4
-    # ci = cj = -1
     if bdri == 0:
         ci, cj = k % N, 0
     elif bdri == 1:
@@ -62,11 +61,13 @@ for k in range(K):
     
     # [3] 공 맞기 처리
     
-    for _ in range(N):
-        if 0 <= ci < N and 0 <= cj < N and arr[ci][cj] > 4:
-          team_n = arr[ci][cj]
-          ans += (teams[team_n].index((ci,cj)) + 1) ** 2
-          teams[team_n].reverse()
-          break
+    for _ in range(N):                              # 최대 N범위까지 탐색
+        if 0<=ci<N and 0<=cj<N and arr[ci][cj]>4:   # 특정 팀이 공 받았음
+            team_n = arr[ci][cj]
+            # (해당 좌표 인덱스 +1 )**2
+            ans += (teams[team_n].index((ci,cj))+1)**2
+            # teams[team_n] = teams[team_n][::-1]
+            teams[team_n].reverse()
+            break
         ci, cj = ci + bdr[bdri][0], cj + bdr[bdri][1]
 print(ans)
