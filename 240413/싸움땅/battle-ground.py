@@ -3,7 +3,7 @@ input = sys.stdin.readline
 N, M, K = map(int, input().split())
 
 arr = [list(map(int, input().split())) for _ in range(N)]
-guns = [[[0] for _ in range(N)] for _ in range(N)]
+guns = [[[] for _ in range(N)] for _ in range(N)]
 for i in range(N):
     for j in range(N):
         if arr[i][j] > 0:
@@ -22,7 +22,6 @@ dr = [(-1,0),(0,1),(1,0),(0,-1)]
 opp = {0:2, 1:3, 2:0, 3:1}
 
 def leave(num, ci, cj, cd, cs, cg, cp):
-    ci, cj, cd, cs, cg, cp = players[num]
     for k in range(4):
         ni, nj = ci + dr[(cd + k) % 4][0], cj + dr[(cd + k) % 4][1]
         if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
@@ -46,7 +45,8 @@ for _ in range(K):
         if arr[ni][nj] == 0:
             if len(guns[ni][nj]) > 0:
                 if cg < max(guns[ni][nj]):
-                    guns[ni][nj].append(cg)
+                    if cg > 0:
+                        guns[ni][nj].append(cg)
                     cg = max(guns[ni][nj])
                     guns[ni][nj].remove(cg)
             # 진짜 이동 (이동한 것 업데이트)
@@ -58,7 +58,6 @@ for _ in range(K):
             if (cs+cg > es+eg) or ((cs+cg == es+eg) and cs > es): # 내가 승리
                 cp += abs(cs+cg - es - eg)
                 leave(enemy, ni, nj, ed, ep, 0, es)
-
                 if cg < eg:
                     if cg > 0:
                         guns[ni][nj].append(cg)
