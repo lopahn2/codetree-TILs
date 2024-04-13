@@ -20,6 +20,21 @@ for n in range(1, 1+M):
 
 dr = [(-1,0),(0,1),(1,0),(0,-1)]
 opp = {0:2, 1:3, 2:0, 3:1}
+
+def leave(num, ci, cj, cd, cs, cg, cp):
+    ci, cj, cd, cs, cg, cp = players[num]
+    for k in range(4):
+        ni, nj = ci + dr[(cd + k) % 4][0], cj + dr[(cd + k) % 4][1]
+        if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
+            if len(guns[ni][nj]) > 0:
+                if cg > max(guns[ni][nj]):
+                    guns[ni][nj].append(cg)
+                    cg = max(guns[ni][nj])
+                    guns[ni][nj].remove(cg)
+                arr[ni][nj] = num
+                players[num] = [ni, nj, (cd + k) % 4, cs, cg, cp]
+                return
+
 for _ in range(K):
     for i in range(1, M+1):
         ci, cj, cd, cs, cg, cp = players[i]
@@ -42,50 +57,32 @@ for _ in range(K):
             ei, ej, ed, es, eg, ep = players[enemy]
             if (cs+cg > es+eg) or ((cs+cg == es+eg) and cs > es): # 내가 승리
                 cp += abs(cs+cg - es - eg)
-                # 진 사람 행동
-                guns[ni][nj].append(eg)
-                eg = 0 # 총 버리기
+                leave(enemy, ni, nj, ed, ep, 0, es)
 
-                for edi in range(4):
-                    eni, enj = ei + dr[(ed + edi) % 4][0], ej + dr[(ed + edi) % 4][1]
-                    if 0 <= eni < N and 0 <= enj < N and arr[eni][enj] == 0:
-                        # arr[ei][ej] = 0
-                        arr[eni][enj] = enemy
-                        new_gun = 0
-                        if len(guns[eni][enj]) > 0:
-                            new_gun = max(guns[eni][enj])
-                            guns[eni][enj].remove(new_gun)
-                        players[enemy] = [eni, enj, (ed + edi) % 4, es, new_gun, ep]
-                        break
-                # 이긴 사람 행동
-                if cg < max(guns[ni][nj]):
-                    guns[ni][nj].append(cg)
-                    cg = max(guns[ni][nj])
-                    guns[ni][nj].remove(cg)
-                players[i] = [ni, nj, cd, cs, cg, cp]
+                if cg < eg:
+                    if cg > 0:
+                        guns[ni][nj].append(cg)
+                    cg= eg
+                else:
+                    if eg > 0:
+                        guns[ni][nj].append(eg)
+                arr[ni][nj] = i
+                players[i] = [ni, nj, cd,cp,cg,cs]
+                
             else: # 내가 패배
                 ep += abs(cs+cg - es - eg)
+                leave(i, ni, nj, cd, cp, 0, cs)
 
-                # 진 사람 행동
-                guns[ni][nj].append(cg)
-                cg = 0 # 총 버리기
-
-                for cdi in range(4):
-                    cni, cnj = ni + dr[(cd + cdi) % 4][0], nj + dr[(cd + cdi) % 4][1]
-                    if 0 <= cni < N and 0 <= cnj < N and arr[cni][cnj] == 0:
-                        arr[cni][cnj] = i
-                        new_gun = 0
-                        if len(guns[cni][cnj]) > 0:
-                            new_gun = max(guns[cni][cnj])
-                            guns[cni][cnj].remove(new_gun)
-                        players[i] = [cni, cnj, (cd + cdi) % 4, cs, new_gun, cp]
-                        break
-                # 이긴 사람 행동
-                if eg < max(guns[ni][nj]):
-                    guns[ni][nj].append(eg)
-                    eg = max(guns[ni][nj])
-                    guns[ni][nj].remove(eg)
-                players[enemy] = [ni, nj, ed, es, eg, ep]
+                if eg < cg:
+                    if eg > 0:
+                        guns[ni][nj].append(eg)
+                    eg= cg
+                else:
+                    if cg > 0:
+                        guns[ni][nj].append(cg)
+                arr[ni][nj] = enemy
+                players[enemy] = [ni, nj, ed,ep,eg,es]
+                
 
 for i in players:
     print(players[i][5], end=' ')
