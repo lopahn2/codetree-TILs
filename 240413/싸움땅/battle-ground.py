@@ -40,10 +40,10 @@ for _ in range(K):
   for i in players:
     # [1] 한 칸 이동 (격자 벗어나면 반대 )
     ci, cj, cd, cp, cg, cs = players[i]
-    ni, nj = ci + d[cd][0], cj + d[cd][1]
+    ni, nj = ci + dr[cd][0], cj + dr[cd][1]
     if ni < 0 or ni <= N or nj < 0 or nj >= N:
       cd = opp[cd]
-      ni, nj = ci + d[cd][0], cj + d[cd][1]
+      ni, nj = ci + dr[cd][0], cj + dr[cd][1]
     arr[ci][cj] = 0 # 이전 위치에서 제거
     # [2-1] 이동한 위치가 빈칸 => 가장 강한 총 획득
     if arr[ni][nj] == 0:
