@@ -15,7 +15,7 @@ def bfs(si, sj, team_n):
     while q:
         ci, cj = q.popleft()
         for ni, nj in ((ci + 1, cj),(ci - 1, cj),(ci, cj + 1),(ci, cj - 1)):
-            if 0 <= ni < N and 0 <= nj < N and v[ni][nj] == 0 and arr[ni][nj] != 0:
+            if 0 <= ni < N and 0 <= nj < N and v[ni][nj] == 0:
                 if arr[ni][nj] == 2 or (arr[ni][nj] == 3 and (ni, nj) != (si, sj)):
                     team.append((ni,nj))
                     q.append((ni,nj))
@@ -45,12 +45,12 @@ for k in range(K):
                 team.appendleft((ni,nj))
                 arr[ni][nj] = tn
                 break
-        teams[tn] = team
+        # teams[tn] = team
     # [2] 공 던지기
     bdr = [(0,1), (-1,0), (0,-1),(1,0)]
     bdri = ( k // N ) % 4
 
-    ci = cj = -1
+    # ci = cj = -1
     if bdri == 0:
         ci, cj = k % N, 0
     elif bdri == 1:
