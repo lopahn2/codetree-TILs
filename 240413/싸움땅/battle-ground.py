@@ -26,9 +26,8 @@ def leave(num, ci, cj, cd, cp, cg, cs):
     ni, nj = ci + pdr[(cd + di) % 4][0], cj + pdr[(cd + di) % 4][1]
     if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
       if len(guns[ni][nj]) > 0:
-         mx = max(guns[ni][nj])
-         cg = mx
-         guns[ni][nj].remove(mx)
+         cg = max(guns[ni][nj])
+         guns[ni][nj].remove(cg)
       players[num] = [ni, nj, (cd + di) % 4, cp ,cg, cs]
       arr[ni][nj] = num
       return
@@ -59,7 +58,7 @@ for k in range(1, K+1):
       enemy = arr[ni][nj]
       ei, ej, ed, ep, eg, es = players[enemy]
 
-      if ((cp+cg) > (ep+eg)) or ((cp+cg) == (ep+eg) and cp > eg): # 내가 이기는 경우
+      if ((cp+cg) > (ep+eg)) or ((cp+cg) == (ep+eg) and cp > ep): # 내가 이기는 경우
         cs += abs((cp+cg) - (ep+eg))
         leave(enemy, ni, nj, ed, ep, 0, es)
         if cg < eg:
