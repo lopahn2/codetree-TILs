@@ -42,7 +42,6 @@ for _ in range(K):
             ei, ej, ed, es, eg, ep = players[enemy]
             if (cs+cg > es+eg) or ((cs+cg == es+eg) and cs > es): # 내가 승리
                 cp += abs(cs+cg - es - eg)
-
                 # 진 사람 행동
                 guns[ni][nj].append(eg)
                 eg = 0 # 총 버리기
@@ -50,7 +49,7 @@ for _ in range(K):
                 for edi in range(4):
                     eni, enj = ei + dr[(ed + edi) % 4][0], ej + dr[(ed + edi) % 4][1]
                     if 0 <= eni < N and 0 <= enj < N and arr[eni][enj] == 0:
-                        arr[ei][ej] = 0
+                        # arr[ei][ej] = 0
                         arr[eni][enj] = enemy
                         new_gun = 0
                         if len(guns[eni][enj]) > 0:
