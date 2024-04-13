@@ -26,7 +26,7 @@ def leave(num, ci, cj, cd, cs, cg, cp):
         ni, nj = ci + dr[(cd + k) % 4][0], cj + dr[(cd + k) % 4][1]
         if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
             if len(guns[ni][nj]) > 0:
-                if cg > max(guns[ni][nj]):
+                if cg < max(guns[ni][nj]):
                     guns[ni][nj].append(cg)
                     cg = max(guns[ni][nj])
                     guns[ni][nj].remove(cg)
