@@ -91,5 +91,5 @@ for _ in range(K):
         players[enemy] = [ni, nj, ed, ep,eg, es]
 
 
-for i in range(players):
+for i in players:
   print(players[i][5], end =" ")
