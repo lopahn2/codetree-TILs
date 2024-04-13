@@ -8,6 +8,7 @@ from collections import deque
 def bfs(si, sj, team_n):
     team = deque()
     q = deque()
+
     team.append((si,sj))
     q.append((si,sj))
     arr[si][sj] = team_n
@@ -16,7 +17,7 @@ def bfs(si, sj, team_n):
         ci, cj = q.popleft()
         for ni, nj in ((ci + 1, cj),(ci - 1, cj),(ci, cj + 1),(ci, cj - 1)):
             if 0 <= ni < N and 0 <= nj < N and v[ni][nj] == 0:
-                if arr[ni][nj] == 2 or (arr[ni][nj] == 3 and (ni, nj) != (si, sj)):
+                if arr[ni][nj] == 2 or (arr[ni][nj] == 3 and (ci, cj) != (si, sj)):
                     team.append((ni,nj))
                     q.append((ni,nj))
                     v[ni][nj] = 1
@@ -37,27 +38,27 @@ ans = 0
 bdr = [(0,1), (-1,0), (0,-1),(1,0)]
 for k in range(K):
     # [1] 꼬리 이동
-    for tn, team in teams.items():
-        ti, tj = team.pop()
-        arr[ti][tj] = 4
-        hi, hj = team[0]
-        for ni, nj in ((hi + 1, hj),(hi - 1, hj),(hi, hj + 1),(hi, hj - 1)):
-            if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 4:
-                team.appendleft((ni,nj))
-                arr[ni][nj] = tn
-                break
-        # teams[tn] = team
+    for team in teams.values():
+        ei, ej = team.pop()
+        arr[ei][ej] = 4
+        si, sj = team[0]
+        for ni,nj in ((si-1,sj),(si+1,sj),(si,sj-1),(si,sj+1)):
+          if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 4:
+            team.appendleft((ni,nj))
+            arr[ni][nj] = arr[si][sj]
+            break
     # [2] 공 던지기
     
     bdri = ( k // N ) % 4
-    if bdri == 0:
-        ci, cj = k % N, 0
-    elif bdri == 1:
-        ci, cj = N - 1, k % N
-    elif bdri == 2:
-        ci, cj = N - 1 - ( k % N ), N - 1
+    offset = k%N
+    if bdri==0:                           # 우
+        ci,cj = offset, 0
+    elif bdri==1:
+        ci,cj = N-1, offset
+    elif bdri==2:
+        ci,cj = N-1-offset, N-1
     else:
-        ci, cj = 0, N - 1 - ( k % N )
+        ci,cj = 0, N-1-offset
     
     # [3] 공 맞기 처리
     
