@@ -10,19 +10,17 @@ def bfs(si, sj, team_n):
     q = deque()
     team.append((si,sj))
     q.append((si,sj))
+    arr[si][sj] = team_n
     v[si][sj] = 1
     while q:
         ci, cj = q.popleft()
         for ni, nj in ((ci + 1, cj),(ci - 1, cj),(ci, cj + 1),(ci, cj - 1)):
             if 0 <= ni < N and 0 <= nj < N and v[ni][nj] == 0 and arr[ni][nj] != 0:
-                if arr[ni][nj] == 2:
+                if arr[ni][nj] == 2 or (arr[ni][nj] == 3 and (ni, nj) != (si, sj)):
                     team.append((ni,nj))
                     q.append((ni,nj))
                     v[ni][nj] = 1
-                elif arr[ni][nj] == 3 and (ni, nj) != (si, sj):
-                    team.append((ni,nj))
-                    q.append((ni,nj))
-                    v[ni][nj] = 1       
+                    arr[ni][nj] = team_n
     teams[team_n] = team
 
 
@@ -62,15 +60,12 @@ for k in range(K):
         ci, cj = 0, N - 1 - ( k % N )
     
     # [3] 공 맞기 처리
-    hit = False
+    
     for _ in range(N):
-        if hit:
-            break
-        for tn, team in teams.items():
-            if (ci, cj) in list(team):
-                ans += (list(team).index((ci, cj)) + 1) ** 2
-                teams[tn].reverse()
-                hit = True
-                break
+        if 0 <= ci < N and 0 <= cj < N and arr[ci][cj] > 4:
+          team_n = arr[ci][cj]
+          ans += (teams[team_n].index((ci,cj)) + 1) ** 2
+          teams[team_n].reverse()
+          break
         ci, cj = ci + bdr[bdri][0], cj + bdr[bdri][1]
 print(ans)
