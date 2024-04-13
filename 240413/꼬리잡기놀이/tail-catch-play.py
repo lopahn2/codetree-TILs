@@ -44,6 +44,7 @@ for k in range(K):
             if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 4:
                 team.appendleft((ni,nj))
                 arr[ni][nj] = tn
+                break
         teams[tn] = team
     # [2] 공 던지기
     bdr = [(0,1), (-1,0), (0,-1),(1,0)]
