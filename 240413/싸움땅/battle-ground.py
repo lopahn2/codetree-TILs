@@ -21,19 +21,29 @@ for n in range(1, 1+M):
 dr = [(-1,0),(0,1),(1,0),(0,-1)]
 opp = {0:2, 1:3, 2:0, 3:1}
 
-def leave(num, ci, cj, cd, cs, cg, cp):
-    for k in range(4):
-        ni, nj = ci + dr[(cd + k) % 4][0], cj + dr[(cd + k) % 4][1]
-        if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
-            if len(guns[ni][nj]) > 0:
-                if cg < max(guns[ni][nj]):
-                    guns[ni][nj].append(cg)
-                    cg = max(guns[ni][nj])
-                    guns[ni][nj].remove(cg)
-                arr[ni][nj] = num
-                players[num] = [ni, nj, (cd + k) % 4, cs, cg, cp]
-                return
-
+# def leave(num, ci, cj, cd, cs, cg, cp):
+#     for k in range(4):
+#         ni, nj = ci + dr[(cd + k) % 4][0], cj + dr[(cd + k) % 4][1]
+#         if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
+#             if len(guns[ni][nj]) > 0:
+#                 if cg < max(guns[ni][nj]):
+#                     guns[ni][nj].append(cg)
+#                     cg = max(guns[ni][nj])
+#                     guns[ni][nj].remove(cg)
+#                 arr[ni][nj] = num
+#                 players[num] = [ni, nj, (cd + k) % 4, cs, cg, cp]
+#                 return
+def leave(num,ci, cj, cd, cs, cg, cp):
+    for k in range(4):      # 현재방향부터 시계방향 90도씩 빈칸 찾기 (최소한 내가온(상대방이 온)칸은 비어있음)
+        ni,nj=ci+dr[(cd+k)%4][0], cj+dr[(cd+k)%4][0]
+        if 0<=ni<N and 0<=nj<N and arr[ni][nj]==0:
+            # 총이 있다면 가장 강한총 획득
+            if len(guns[ni][nj])>0:
+                cg = max(guns[ni][nj])
+                guns[ni][nj].remove(cg)
+            arr[ni][nj]=num # 내 정보 갱신 후 리턴
+            players[num]=[ni,nj,(cd+k)%4,cs,cg,cp]
+            return
 for _ in range(K):
     for i in range(1, M+1):
         ci, cj, cd, cs, cg, cp = players[i]
